@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Animated Gradient Background</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Add Alpine.js from CDN -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.3/cdn.min.js"
+      defer
+    ></script>
+    <script src="vtt.js"></script>
+    <script src="content.js"></script>
+    <script src="sections.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: "Lexend", sans-serif;
+        color: white;
+        overflow: hidden;
+      }
+
+      .gradient-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+        background-size: 400% 400%;
+        animation: gradient 15s ease infinite;
+        z-index: -1;
+      }
+
+      @keyframes gradient {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .content {
+        text-align: center;
+        padding: 0 2rem 0 2rem;
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 0px;
+        backdrop-filter: blur(5px);
+        min-width: 360px;
+        max-width: 520px;
+        height: 100vh;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        position: relative;
+        overflow: hidden;
+      }
+
+      h1 {
+        margin: 0 0 1rem 0;
+        font-size: 2.5rem;
+      }
+      h2 {
+        margin: 0 0 1rem 0;
+        text-align: left;
+        font-size: 18px;
+      }
+
+      p {
+        margin: 0;
+        font-size: 18px;
+        line-height: 1.6;
+      }
+
+      .header {
+        margin-bottom: 2rem;
+        margin-top: 10px;
+        padding-top: 0;
+        text-align: left;
+        width: 100%;
+        align-self: flex-start;
+      }
+
+      .title {
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 4px;
+      }
+
+      .subtitle {
+        color: white;
+        font-size: 16px;
+        opacity: 0.7;
+        line-height: 1.4;
+        font-weight: normal;
+      }
+
+      .footer {
+        background-color: rgba(0, 0, 0, 0.3);
+        height: 52px;
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 15px;
+        box-sizing: border-box;
+      }
+
+      .center-controls {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .play-button {
+        width: 36px;
+        height: 36px;
+        background-color: transparent;
+        border: 2px solid white;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+      }
+
+      .play-icon {
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 8px 0 8px 12px;
+        border-color: transparent transparent transparent white;
+        margin-left: 3px; /* Centrar visualmente el triángulo */
+      }
+
+      .pause-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 14px;
+        height: 14px;
+      }
+
+      .pause-icon::before,
+      .pause-icon::after {
+        content: "";
+        display: block;
+        width: 4px;
+        height: 14px;
+        background-color: white;
+        margin: 0 2px;
+      }
+
+      .main-content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 60px 2rem 0;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .serial-number {
+        font-size: 15px;
+        color: white;
+        opacity: 0.7;
+        font-family: "Lexend", sans-serif;
+        margin-bottom: 8px;
+      }
+
+      .sync-text {
+        color: yellow;
+        font-family: "Lexend", sans-serif;
+        font-size: 16px;
+        text-align: left;
+        position: absolute;
+        bottom: 62px;
+        left: 0;
+        right: 0;
+        padding: 0 1.5rem;
+        margin-bottom: 5px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .sync-text.visible {
+        opacity: 1;
+      }
+
+      .question {
+        font-size: 18px;
+        line-height: 1.2;
+        text-align: left;
+        font-family: "Lexend", sans-serif;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      .option {
+        font-size: 18px;
+        line-height: 1.3;
+        text-align: left;
+        font-family: "Lexend", sans-serif;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        margin-top: 30px;
+      }
+
+      .correct {
+        font-size: 18px;
+        line-height: 1.3;
+        text-align: left;
+        font-family: "Lexend", sans-serif;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        margin-top: 30px;
+        color: #4ade80;
+      }
+
+      .explanation {
+        font-size: 18px;
+        line-height: 1.4;
+        text-align: left;
+        font-family: "Lexend", sans-serif;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        margin-top: 30px;
+      }
+
+      .section-wrapper {
+        opacity: 0;
+        transform: translateY(10px);
+        animation: fadeIn 0.5s ease forwards;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .progress-bar {
+        position: absolute;
+        bottom: 52px;
+        left: 0;
+        height: 4px;
+        background-color: rgba(255, 255, 255, 0.5);
+        width: 100%;
+      }
+
+      .progress {
+        height: 100%;
+        background-color: white;
+        width: 0%;
+        transition: width 0.1s linear;
+      }
+
+      .timer {
+        position: absolute;
+        bottom: 32px;
+        right: 16px;
+        font-size: 12px;
+        color: white;
+        opacity: 0.8;
+      }
+
+      p.question {
+        margin-bottom: 18px;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="gradient-background"></div>
+    <div
+      class="content"
+      x-data="{ 
+	  isPlaying: false, 
+	  audio: new Audio('audio.mp3'),
+	  currentTime: 0,
+	  duration: 60,
+	  subtitleText: '',
+	  subtitles: [],
+	  showSubtitles: false,
+	  currentSection: 'question',
+	  
+	  init() {
+		// Parse VTT data
+		this.parseVTT();
+		
+		// Set up event listeners for the audio element
+		this.audio.addEventListener('timeupdate', () => {
+		  this.currentTime = this.audio.currentTime;
+		  if (this.isPlaying) {
+			this.updateSubtitle();
+			this.updateSection();
+		  }
+		});
+		
+		this.audio.addEventListener('loadedmetadata', () => {
+		  this.duration = this.audio.duration;
+		});
+		
+		this.audio.addEventListener('ended', () => {
+		  this.isPlaying = false;
+		  this.showSubtitles = false;
+		});
+		
+		// Attempt to load the audio file
+		this.audio.load();
+		
+		// Initialize with the first section
+		this.updateSectionContent('question');
+	  },
+	  
+	  parseVTT() {
+		// Use the VTT data
+		const vttContent = subtitlesData;
+		this.subtitles = [];
+
+		// Dividir el contenido por líneas
+		const lines = vttContent.split('\n');
+
+		// Ignorar la línea WEBVTT
+		for (let i = 1; i < lines.length; i++) {
+		  // Buscar timestamps (formato: 00:00:00.000 --> 00:00:00.000)
+		  if (lines[i].includes(' --> ')) {
+			const times = lines[i].split(' --> ');
+			const startTime = this.parseTimestamp(times[0]);
+			const endTime = this.parseTimestamp(times[1]);
+
+			// Obtener el texto del subtítulo (puede estar en múltiples líneas)
+			let textContent = '';
+			i++;
+
+			// Continuar hasta encontrar una línea vacía o el final del archivo
+			while (i < lines.length && lines[i].trim() !== '') {
+			  textContent += (textContent ? '\n' : '') + lines[i];
+			  i++;
+			}
+
+			// Añadir subtítulo a la lista
+			if (textContent) {
+			  this.subtitles.push({
+				start: startTime,
+				end: endTime,
+				text: textContent
+			  });
+			}
+		  }
+		}
+	  },
+	  
+	  parseTimestamp(timestamp) {
+		const parts = timestamp.trim().split(':');
+		let seconds = 0;
+
+		if (parts.length === 3) {
+		  // hh:mm:ss.ms
+		  seconds += parseFloat(parts[0]) * 3600; // horas
+		  seconds += parseFloat(parts[1]) * 60; // minutos
+		  seconds += parseFloat(parts[2]); // segundos y milisegundos
+		} else if (parts.length === 2) {
+		  // mm:ss.ms
+		  seconds += parseFloat(parts[0]) * 60; // minutos
+		  seconds += parseFloat(parts[1]); // segundos y milisegundos
+		}
+
+		return seconds;
+	  },
+	  
+	  togglePlay() {
+		if (this.isPlaying) {
+		  this.audio.pause();
+		  this.showSubtitles = false;
+		} else {
+		  // Promise to handle autoplay restrictions in browsers
+		  const playPromise = this.audio.play();
+		  
+		  if (playPromise !== undefined) {
+			playPromise.then(_ => {
+			  // Playback started successfully
+			  this.showSubtitles = true;
+			})
+			.catch(error => {
+			  console.error('Error playing audio:', error);
+			  // Provide visual feedback that audio couldn't be played
+			  alert('No se pudo reproducir el audio. Es posible que el archivo no exista o que el navegador lo haya bloqueado.');
+			});
+		  }
+		}
+		this.isPlaying = !this.isPlaying;
+		if (!this.isPlaying) {
+		  this.showSubtitles = false;
+		}
+	  },
+	  
+	  updateSubtitle() {
+		const current = this.currentTime;
+		// Find the current subtitle
+		let found = false;
+		for (let i = 0; i < this.subtitles.length; i++) {
+		  if (current >= this.subtitles[i].start && current <= this.subtitles[i].end) {
+			this.subtitleText = this.subtitles[i].text;
+			found = true;
+			break;
+		  }
+		}
+		
+		// Clear subtitle if none is active
+		if (!found) {
+		  this.subtitleText = '';
+		}
+	  },
+	  
+	  updateSection() {
+		const current = Math.round(this.currentTime * 100) / 100; // Redondear a dos decimales
+		// Find the current section based on time
+		for (let i = 0; i < sectionTimings.length; i++) {
+		  if (current >= sectionTimings[i].startTime && current < sectionTimings[i].endTime) { // Cambiado <= a <
+			if (this.currentSection !== sectionTimings[i].id) {
+			  this.currentSection = sectionTimings[i].id;
+			  this.updateSectionContent(sectionTimings[i].id);
+			}
+			return;
+		  }
+		}
+	  },
+	  
+    updateSectionContent(sectionId) {
+      const contenidoDiv = document.getElementById('contenido');
+      if (!contenidoDiv || !sectionContents[sectionId]) return;
+    
+      contenidoDiv.innerHTML = '';
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = sectionContents[sectionId];
+    
+      const wrapper = document.createElement('div');
+      wrapper.className = 'section-wrapper';
+      wrapper.style.animation = 'fadeIn 0.5s ease forwards';
+    
+      if (sectionId === 'explanation') {
+        const h2 = tempDiv.querySelector('h2'); // Resposta correcta: X
+        const paragraphs = Array.from(tempDiv.querySelectorAll('p'));
+    
+        if (h2) wrapper.appendChild(h2.cloneNode(true));
+    
+        // Agregar solo los dos primeros párrafos visibles
+        let count = 0;
+        for (let p of paragraphs) {
+          if (count >= 2) break;
+          if (p.textContent.trim()) {
+            wrapper.appendChild(p.cloneNode(true));
+            count++;
+          }
+        }
+    
+        // Fallback si no hay párrafos
+        if (count === 0) {
+          const fallback = document.createElement('p');
+          fallback.className = 'question';
+          fallback.textContent = 'Explicació no disponible.';
+          wrapper.appendChild(fallback);
+        }
+    
+      } else {
+        while (tempDiv.firstChild) {
+          wrapper.appendChild(tempDiv.firstChild);
+        }
+      }
+    
+      contenidoDiv.appendChild(wrapper);
+    }
+    ,
+	  
+	  formatTime(seconds) {
+		const mins = Math.floor(seconds / 60);
+		const secs = Math.floor(seconds % 60);
+		return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+	  },
+	  
+	  progressPercentage() {
+		return (this.currentTime / this.duration) * 100;
+	  }
+	}"
+    >
+      <div class="header">
+        <div class="title" x-text="title"></div>
+        <div class="subtitle" x-text="subtitle"></div>
+      </div>
+      <div class="main-content">
+        <div class="serial-number" x-text="serialNumber"></div>
+        <div id="contenido">
+          <!-- Dynamic content will be loaded here -->
+        </div>
+      </div>
+      <div
+        class="sync-text"
+        x-text="subtitleText"
+        x-bind:class="{ 'visible': showSubtitles }"
+      ></div>
+      <div class="progress-bar">
+        <div class="progress" :style="`width: ${progressPercentage()}%`"></div>
+      </div>
+      <div
+        class="timer"
+        x-text="formatTime(currentTime) + ' / ' + formatTime(duration)"
+      ></div>
+      <div class="footer">
+        <div class="placeholder"></div>
+        <div class="center-controls">
+          <button class="play-button" @click="togglePlay()">
+            <div x-show="!isPlaying" class="play-icon"></div>
+            <div x-show="isPlaying" class="pause-icon"></div>
+          </button>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Precargar el audio explícitamente
+      const audioElement = new Audio("audio.mp3");
+      audioElement.preload = "auto";
+    </script>
+  </body>
+</html>

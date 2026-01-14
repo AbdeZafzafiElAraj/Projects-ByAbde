@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recursos d'àudio i animació per assignatura</title>
+  <link rel="icon" type="image/png" href="https://letsebau.es/files/stacks-image-213b4a0.png" />
+  <meta name="description" content="Llistat complet d'àudios i animacions classificats per assignatura educativa.">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #e63946;
+      --secondary-color: #457b9d;
+      --accent-color: #a8dadc;
+      --light-color: #f1faee;
+      --dark-color: #1d3557;
+      --success-color: #4caf50;
+      --warning-color: #ff9800;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      font-family: "IBM Plex Sans", sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f7f7f7;
+      font-size: 0.95rem;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--accent-color);
+    }
+
+    header img {
+      height: 60px;
+      transition: transform 0.3s ease;
+    }
+
+    header img:hover {
+      transform: scale(1.05);
+    }
+
+    header h1 {
+      font-weight: 600;
+      font-size: 1.8rem;
+      margin: 0;
+      color: var(--dark-color);
+    }
+
+    .header-text {
+      flex-grow: 1;
+    }
+
+    .header-text p {
+      margin: 5px 0 0;
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .search-box {
+      flex-grow: 1;
+      max-width: 400px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 10px 15px 10px 40px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--secondary-color);
+      box-shadow: 0 0 0 2px rgba(69, 123, 157, 0.2);
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #777;
+    }
+
+    .filter-controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    select {
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      background-color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: var(--secondary-color);
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .filter-group label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--dark-color);
+    }
+
+    .reset-filters {
+      background-color: var(--light-color);
+      color: var(--dark-color);
+      border: 1px solid #ddd;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .reset-filters:hover {
+      background-color: #e8e8e8;
+    }
+
+    .table-wrapper {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: auto;
+    }
+
+    thead {
+      background-color: var(--dark-color);
+      color: white;
+      position: sticky;
+      top: 0;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+      vertical-align: middle;
+    }
+
+    th {
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+    }
+
+    th i {
+      margin-left: 5px;
+      cursor: pointer;
+    }
+
+    .sort-icon {
+      opacity: 0.5;
+      transition: opacity 0.2s ease;
+    }
+
+    th:hover .sort-icon {
+      opacity: 1;
+    }
+
+    th.asc .sort-icon, th.desc .sort-icon {
+      opacity: 1;
+    }
+
+    tbody tr {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    tbody tr.hidden {
+      opacity: 0;
+      transform: scale(0.98);
+      pointer-events: none;
+      height: 0;
+      overflow: hidden;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    tbody tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    .audio-link {
+      background-color: rgba(255, 152, 0, 0.1);
+      color: var(--warning-color);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+    }
+
+    .audio-link:hover {
+      background-color: rgba(255, 152, 0, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .animation-link {
+      background-color: rgba(76, 175, 80, 0.1);
+      color: var(--success-color);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+    }
+
+    .animation-link:hover {
+      background-color: rgba(76, 175, 80, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .no-resources {
+      color: #777;
+      font-style: italic;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .pagination button {
+      padding: 8px 15px;
+      border: 1px solid #ddd;
+      background-color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .pagination button:hover {
+      background-color: #f1f1f1;
+    }
+
+    .pagination button.active {
+      background-color: var(--dark-color);
+      color: white;
+      border-color: var(--dark-color);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge-category-a {
+      background-color: #e3f2fd;
+      color: #1976d2;
+    }
+
+    .badge-category-b {
+      background-color: #e8f5e9;
+      color: #388e3c;
+    }
+
+    .badge-category-c {
+      background-color: #fff3e0;
+      color: #ffa000;
+    }
+
+    .resource-count {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #666;
+      text-align: right;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+      color: #777;
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+      }
+      
+      .controls {
+        flex-direction: column;
+      }
+      
+      .search-box {
+        max-width: 100%;
+      }
+      
+      .filter-controls {
+        flex-direction: column;
+      }
+      
+      .filter-group {
+        width: 100%;
+      }
+      
+      .filter-group select {
+        flex-grow: 1;
+      }
+      
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+      
+      th, td {
+        white-space: nowrap;
+      }
+    }
+
+    .custom-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--accent-color);
+      gap: 20px;
+    }
+
+    .logo-left img {
+      height: 60px;
+    }
+
+    .header-text {
+      flex-grow: 1;
+      text-align: center;
+    }
+
+    .header-text h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--dark-color);
+    }
+
+    .header-text p {
+      margin: 5px 0 0;
+      font-size: 0.95rem;
+      color: #666;
+    }
+
+    .logo-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      text-align: right;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .logo-right img {
+      margin-top: 6px;
+      height: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .custom-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .logo-right {
+        align-items: center;
+        text-align: center;
+      }
+    }
+
+    /* ---------- NOVES REGLES PER DESCRIPCIÓ EXPANDIBLE ---------- */
+    td.description-cell {
+      max-width: 280px;         /* amplada de la cel·la truncada */
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    td.description-cell.expanded {
+      white-space: normal;
+      max-width: none;
+      overflow: visible;
+    }
+    select {
+      appearance: none;              /* elimina estil per defecte del sistema */
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 10px 15px;
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: 0.9rem;
+      color: #333;
+      line-height: 1.4;
+      background-image: url("data:image/svg+xml;utf8,<svg fill='%23457b9d' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 14px;
+      padding-right: 40px; /* espai per a la fletxa */
+    }
+
+    select:focus {
+      outline: none;
+      border-color: var(--secondary-color);
+      box-shadow: 0 0 0 2px rgba(69, 123, 157, 0.2);
+    }
+
+  </style>
+</head>
+<body>
+
+  <header class="custom-header">
+    <div class="logo-left">
+      <img 
+        src="https://letsebau.es/files/stacks-image-213b4a0.png" 
+        alt="Logo Let’s EBAU"
+      />
+    </div>
+  
+    <div class="header-text">
+      <h1>Recursos d'àudio i animació per assignatura</h1>
+      <p>Llistat complet de recursos educatius disponibles classificats per assignatura i categoria</p>
+    </div>
+  
+    <div class="logo-right">
+      <span>Amb el suport de</span>
+      <img 
+        src="https://jupiterk.org/cultura-generalitat.png" 
+        alt="Logo Generalitat de Catalunya"
+      />
+    </div>
+  </header>
+  
+  <main>
+    <div class="controls">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="search-input" placeholder="Cerca per nom, descripció o categoria...">
+      </div>
+      <div class="filter-controls">
+        <div class="filter-group">
+          <label for="name-filter">Nom:</label>
+          <select id="name-filter">
+            <option value="">Tots els noms</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="category-filter">Categoria:</label>
+          <select id="category-filter">
+            <option value="">Totes les categories</option>
+          </select>
+        </div>
+        <button class="reset-filters" id="reset-filters">
+          <i class="fas fa-undo"></i> Reinicia
+        </button>
+      </div>
+    </div>
+
+    <div class="resource-count" id="resource-count">
+      Mostrant <span id="visible-count">5</span> de <span id="total-count">5</span> recursos
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th class="sortable" data-column="0">Sèrie <i class="fas fa-sort sort-icon"></i></th>
+            <th class="sortable" data-column="1">Nom <i class="fas fa-sort sort-icon"></i></th>
+            <th>Descripció</th>
+            <th class="sortable" data-column="3">Categoria <i class="fas fa-sort sort-icon"></i></th>
+            <th>Àudio</th>
+            <th>Animació</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>001</td>
+            <td>Introducció a la Biologia</td>
+            <td>Conceptes bàsics de biologia cel·lular i genètica</td>
+            <td><span class="badge badge-category-a">Categoria A</span></td>
+            <td><a class="audio-link" href="#" target="_blank" rel="noopener"><i class="fas fa-volume-up"></i> Àudio</a></td>
+            <td><a class="animation-link" href="#" target="_blank" rel="noopener"><i class="fas fa-film"></i> Animació</a></td>
+          </tr>
+          <tr>
+            <td>002</td>
+            <td>Història de Catalunya</td>
+            <td>Esdeveniments clau des de l'època medieval fins a l'actualitat</td>
+            <td><span class="badge badge-category-b">Categoria B</span></td>
+            <td><a class="audio-link" href="#" target="_blank" rel="noopener"><i class="fas fa-volume-up"></i> Àudio</a></td>
+            <td><a class="animation-link" href="#" target="_blank" rel="noopener"><i class="fas fa-film"></i> Animació</a></td>
+          </tr>
+          <tr>
+            <td>003</td>
+            <td>Matemàtiques Avançades</td>
+            <td>Àlgebra lineal i càlcul diferencial</td>
+            <td><span class="badge badge-category-c">Categoria C</span></td>
+            <td><a class="audio-link" href="#" target="_blank" rel="noopener"><i class="fas fa-volume-up"></i> Àudio</a></td>
+            <td><a class="animation-link" href="#" target="_blank" rel="noopener"><i class="fas fa-film"></i> Animació</a></td>
+          </tr>
+          <tr>
+            <td>004</td>
+            <td>Literatura Catalana</td>
+            <td>Autors i obres representatives dels segles XIX i XX</td>
+            <td><span class="badge badge-category-a">Categoria A</span></td>
+            <td><a class="audio-link" href="#" target="_blank" rel="noopener"><i class="fas fa-volume-up"></i> Àudio</a></td>
+            <td class="no-resources">No disponible</td>
+          </tr>
+          <tr>
+            <td>005</td>
+            <td>Física Quàntica</td>
+            <td>Principis bàsics i experiments fonamentals</td>
+            <td><span class="badge badge-category-c">Categoria C</span></td>
+            <td class="no-resources">No disponible</td>
+            <td><a class="animation-link" href="#" target="_blank" rel="noopener"><i class="fas fa-film"></i> Animació</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 Generalitat de Catalunya - Departament d'Educació</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      populateFilters();
+      setupEventListeners();
+      updateResourceCount();
+      enableDescriptionToggle(); // <--- nou
+  
+      // 🔁 Reforça l’obertura en nova pestanya per àudios i animacions
+      document.querySelectorAll('.audio-link, .animation-link').forEach(link => {
+        link.addEventListener('click', function (e) {
+          const href = this.getAttribute('href');
+          if (href && href !== '#') {
+            e.preventDefault();
+            window.open(href, '_blank');
+          }
+        });
+      });
+    });
+  
+    function populateFilters() {
+      const nameFilter = document.getElementById('name-filter');
+      const categoryFilter = document.getElementById('category-filter');
+      const rows = document.querySelectorAll('tbody tr');
+      const names = new Set();
+      const categories = new Set();
+  
+      rows.forEach(row => {
+        const name = row.querySelector('td:nth-child(2)').textContent.trim();
+        const category = row.querySelector('td:nth-child(4)').textContent.trim();
+        names.add(name);
+        categories.add(category);
+      });
+  
+      Array.from(names).sort().forEach(name => {
+        const option = document.createElement('option');
+        option.value = name;
+        option.textContent = name;
+        nameFilter.appendChild(option);
+      });
+  
+      Array.from(categories).sort().forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        categoryFilter.appendChild(option);
+      });
+    }
+  
+    function setupEventListeners() {
+      document.getElementById('search-input').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('tbody tr');
+  
+        rows.forEach(row => {
+          const text = row.textContent.toLowerCase();
+          row.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+  
+        updateAvailableFilters();
+        updateResourceCount();
+      });
+  
+      document.querySelectorAll('.sortable').forEach(th => {
+        th.addEventListener('click', function() {
+          const columnIndex = parseInt(this.getAttribute('data-column'));
+          const tbody = this.closest('table').querySelector('tbody');
+          const rows = Array.from(tbody.querySelectorAll('tr:not([style*="none"])'));
+          const isAscending = !this.classList.contains('asc');
+  
+          this.closest('thead').querySelectorAll('th').forEach(h => h.classList.remove('asc', 'desc'));
+          this.classList.add(isAscending ? 'asc' : 'desc');
+  
+          rows.sort((a, b) => {
+            const aText = a.children[columnIndex].textContent.trim();
+            const bText = b.children[columnIndex].textContent.trim();
+            return columnIndex === 0
+              ? isAscending
+                ? aText.localeCompare(bText, undefined, {numeric: true})
+                : bText.localeCompare(aText, undefined, {numeric: true})
+              : isAscending
+                ? aText.localeCompare(bText)
+                : bText.localeCompare(aText);
+          });
+  
+          rows.forEach(row => tbody.appendChild(row));
+        });
+      });
+  
+      document.getElementById('name-filter').addEventListener('change', function() {
+        filterResources();
+        updateAvailableFilters();
+        updateResourceCount();
+      });
+  
+      document.getElementById('category-filter').addEventListener('change', function() {
+        filterResources();
+        updateAvailableFilters();
+        updateResourceCount();
+      });
+  
+      document.getElementById('reset-filters').addEventListener('click', function() {
+        document.getElementById('name-filter').value = '';
+        document.getElementById('category-filter').value = '';
+        document.getElementById('search-input').value = '';
+  
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach(row => row.style.display = '');
+  
+        updateAvailableFilters();
+        updateResourceCount();
+      });
+    }
+  
+    function filterResources() {
+      const nameFilter = document.getElementById('name-filter').value;
+      const categoryFilter = document.getElementById('category-filter').value;
+      const rows = document.querySelectorAll('tbody tr');
+  
+      rows.forEach(row => {
+        const name = row.querySelector('td:nth-child(2)').textContent.trim();
+        const category = row.querySelector('td:nth-child(4)').textContent.trim();
+        const nameMatch = !nameFilter || name === nameFilter;
+        const categoryMatch = !categoryFilter || category === categoryFilter;
+        row.style.display = nameMatch && categoryMatch ? '' : 'none';
+      });
+    }
+  
+    function updateAvailableFilters() {
+      const nameFilter = document.getElementById('name-filter');
+      const categoryFilter = document.getElementById('category-filter');
+      const rows = document.querySelectorAll('tbody tr:not([style*="none"])');
+      const availableNames = new Set();
+      const availableCategories = new Set();
+  
+      rows.forEach(row => {
+        const name = row.querySelector('td:nth-child(2)').textContent.trim();
+        const category = row.querySelector('td:nth-child(4)').textContent.trim();
+        availableNames.add(name);
+        availableCategories.add(category);
+      });
+  
+      const currentNameSelection = nameFilter.value;
+      nameFilter.innerHTML = '<option value="">Tots els noms</option>';
+      Array.from(availableNames).sort().forEach(name => {
+        const option = document.createElement('option');
+        option.value = name;
+        option.textContent = name;
+        if (name === currentNameSelection) option.selected = true;
+        nameFilter.appendChild(option);
+      });
+  
+      const currentCategorySelection = categoryFilter.value;
+      categoryFilter.innerHTML = '<option value="">Totes les categories</option>';
+      Array.from(availableCategories).sort().forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        if (category === currentCategorySelection) option.selected = true;
+        categoryFilter.appendChild(option);
+      });
+    }
+  
+    function updateResourceCount() {
+      const visibleCount = document.querySelectorAll('tbody tr:not([style*="none"])').length;
+      const totalCount = document.querySelectorAll('tbody tr').length;
+      document.getElementById('visible-count').textContent = visibleCount;
+      document.getElementById('total-count').textContent = totalCount;
+    }
+  
+    function enableDescriptionToggle() {
+      document.querySelectorAll('tbody tr').forEach(row => {
+        const descCell = row.children[2]; // 3a columna
+        if (descCell) {
+          descCell.classList.add('description-cell');
+          descCell.addEventListener('click', function () {
+            this.classList.toggle('expanded');
+          });
+        }
+      });
+    }
+  </script>  
+</body>
+</html>

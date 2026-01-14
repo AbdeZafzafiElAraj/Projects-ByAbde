@@ -1,0 +1,44 @@
+const title = `{{ASIGNATURA}}`;
+const subtitle = `{{TEMA}}`;
+const serialNumber = `{{SERIAL}}`;
+const asig = `{{SIGLAS}}`;
+
+const sectionContents = {
+  title: `
+    <h1 class="title">${title}</h1>
+  `,
+  subtitle: `
+    <h2 class="subtitle">${subtitle}</h2>
+  `,
+  serialNumber: `
+    <p class="serial-number">${serialNumber}</p>
+  `,
+  question: `
+    <p class="question">{{ENUNCIADO}}</p>
+  `,
+  optionA: `
+    <h2>Opció A</h2>
+    <p class="question">{{OPCIONA}}</p>
+  `,
+  optionB: `
+    <h2>Opció B</h2>
+    <p class="question">{{OPCIONB}}</p>
+  `,
+  optionC: `
+    <h2>Opció C</h2>
+    <p class="question">{{OPCIONC}}</p>
+  `,
+  optionD: `
+    <h2>Opció D</h2>
+    <p class="question">{{OPCIOND}}</p>
+  `,
+  correct: `
+    <h2>Resposta correcta: {{OPCION_CORRECTA}}</h2>
+  `,
+  explanation: `
+    <h2>Explicació</h2>
+{{EXPLICACION_PARRAFOS}}
+  `
+};
+
+const ssml = `{{SSML}}`;
