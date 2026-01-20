@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORANGE GAME</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.0/socket.io.min.js"></script>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffecd9; /* Light orange background */
+            color: #333; /* Dark gray text */
+            background-image: url(img/game.png);
+        }
+
+        /* Contenedor global */
+        #global {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Contenedor principal */
+        #container {
+            max-width: 600px;
+            margin: 20px;
+            padding: 40px;
+            border-radius: 15px;
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: box-shadow 0.3s;
+        }
+
+        /* Títulos */
+        h1, h2, h3 {
+            color: #ff6600; /* Orange title */
+            margin-bottom: 20px;
+        }
+
+        h1 { font-size: 36px; }
+        h2 { font-size: 24px; }
+        h3 { font-size: 18px; }
+
+        /* Botones de respuesta */
+        .answer-btn {
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.2s;
+            width: 100%;
+        }
+
+        #resposta-a {
+            background-color: #e21b3c;
+        }
+
+        #resposta-b {
+            background-color: #1268cd;
+        }
+
+        #resposta-c {
+            background-color: #d89e00;
+        }
+
+        #resposta-d {
+            background-color: #2a8f0d;
+        }
+
+        #resposta-a.clicked,
+        #resposta-b.clicked,
+        #resposta-c.clicked,
+        #resposta-d.clicked {
+            background-color: blue; 
+            color: white; 
+            cursor: not-allowed;
+        }
+
+        #resposta-a.disabled,
+        #resposta-b.disabled,
+        #resposta-c.disabled,
+        #resposta-d.disabled {
+            background-color: gray; 
+            cursor: not-allowed;
+        }
+
+        .answer-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Estilos para la tabla de usuarios */
+        #user-table-container { margin-top: 20px; }
+
+        #user-table th, #user-table td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        #user-table th {
+            font-weight: bold;
+            background-color: #ff6600; /* Orange header */
+            color: #fff; /* White text */
+        }
+
+        #user-table tbody tr:nth-child(even) { background-color: #fff; } /* White background for even rows */
+
+        #user-table tbody tr:hover { background-color: #ffebcc; } /* Light orange background on hover */
+    
+
+        /* Estilo para el contador de tiempo */
+        #countdown-circle {
+            width: 100px;
+            height: 100px;
+            background-color: #ff6600;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+            margin: 20px auto;
+        }
+
+        #second-countdown {
+            font-size: 24px;
+            color: #fff;
+            background-color: #333;
+            padding: 10px 20px;
+            border-radius: 5px;
+            }
+
+        .tornarJugar-jugar-btn {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 20px;
+            border-radius: 50px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .tornarJugar-btn:hover {
+            background-color: #ff6600;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+    </style>
+</head>
+<body>
+<div id="global">
+    <div id="container">
+        <h1>ORANGE GAME</h1>
+
+        <div id="question">
+            <h2 id="pregunta"></h2>
+        </div>
+
+        <div id="buttons-container" style="display: none;">
+            <div class="row">
+                <div class="col-6">
+                    <button id="resposta-a" class="answer-btn" onclick="handleButtonClick('a')"></button>
+                </div>
+                <div class="col-6">
+                    <button id="resposta-b" class="answer-btn" onclick="handleButtonClick('b')"></button>
+                </div>
+                <div class="col-6">
+                    <button id="resposta-c" class="answer-btn" onclick="handleButtonClick('c')"></button>
+                </div>
+                <div class="col-6">
+                    <button id="resposta-d" class="answer-btn" onclick="handleButtonClick('d')"></button>
+                </div>
+            </div>
+        </div>
+
+        <div id="countdown-container" style="display: none;">
+            <div id="countdown-circle">
+                <div id="countdown"></div>
+            </div>
+        </div>
+
+        <div id="right-answer" style="display: none;">
+            <h3>La respuesta correcta es: <span id="right-answer-text">Washington D.C</span></h3>
+        </div>
+
+        <div id="chart-container" style="display: none;">
+            <canvas id="myChart"></canvas>
+            <div id="user-table-container">
+                <table id="user-table" class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Puntos</th>
+                            <th>Username</th>
+                            <th>Aciertos</th>
+                            <th>Fallos</th>
+                            <th>%</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <button id="tornarJugar" class="btn btn-primary btn-lg" style="display: none;"> ¿Otra mas?</button>
+
+    <div id="second-countdown-container" style="display: none;">
+        <div id="second-countdown-circle">
+            <div id="second-countdown"></div>
+        </div>
+    </div>
+</div>
+<script src="main.js"></script>
+<script>
+
+    // Funció que canvia la visibilitat d'un element, els paràmetres són l'element i un boleà, amb true mostrem l'element i amb false l'amaguem
+    function toggleElementVisibility(element, show) {
+        if (show) {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+
+
+    // Funció que canvia la visibilitat d'un botó, els paràmetres són l'element i un boleà, amb true mostrem el botó i amb false l'amaguem
+    function toggleButtonsVisibility(element, show) {
+        if (show) {
+            element.style.display = 'flex';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+
+
+    // Funció que executa totes les modificacions d'estils dels elements HTML durant el compte enrere de cada pregunta
+    function showAndHideDuringFirstCountDown() {
+        toggleButtonsVisibility(document.getElementById('buttons-container'), true); // Mostra el container dels botons de les respostes
+        toggleElementVisibility(document.getElementById('countdown-container'), true); // Mostra el container del CD
+    }
+
+
+    // Funció que executa totes les modificacions d'estils dels elements HTML en acabar el temps per respondre una pregunta
+    function showAndHideAfterFirstCountDown() {
+        toggleButtonsVisibility(document.getElementById('buttons-container'), false); // Oculta el container dels botons de les respostes
+        toggleElementVisibility(document.getElementById('right-answer'), true); // Mostra la resposta correcta
+        toggleElementVisibility(document.getElementById('chart-container'), true); // Mostrar el chart amb les respostes escollides
+        toggleElementVisibility(document.getElementById('countdown-container'), false); // Oculta el container del CD
+    }
+
+
+    // Funció que executa totes les modificacions d'estils dels elements HTML en acabar el temps d'espera per la següent pregunta
+    function showAndHideAfterSecondCountDown() {
+        toggleElementVisibility(document.getElementById('right-answer'), false); // Oculta la resposta correcta
+        toggleElementVisibility(document.getElementById('chart-container'), false); // Mostra el container amb el chart amb les respostes escollides
+        toggleElementVisibility(document.getElementById('second-countdown-container'), false); // Oculta el container del segon CD
+    }
+
+
+    // Funció que executa totes les modificacions d'estils dels elements HTML en acabar la partida
+    function showAndHideAtTheEnd() {
+        toggleElementVisibility(document.getElementById('right-answer'), false); // Oculta la resposta correcta
+        toggleElementVisibility(document.getElementById('chart-container'), false); // Oculta el chart de les respostes escollides
+        toggleElementVisibility(document.getElementById('second-countdown-container'), false); // Oculta el segon CD
+        toggleElementVisibility(document.getElementById('question'), false); // Oculta la pregunta
+    }
+
+
+    // Funció que habilita tots els botons
+    function enableAllButtons() {
+        const buttons = document.querySelectorAll('.answer-btn');
+        buttons.forEach(button => {
+            button.disabled = false;
+        });
+    }
+
+
+    // Funció que deshabilita els botons
+    function disableAllButtons() {
+        const buttons = document.querySelectorAll('.answer-btn');
+        buttons.forEach(button => {
+            button.disabled = true;
+        });
+    }
+
+
+    // Funció per a treure estils dels botons clicats
+    function removeClickedStyles() {
+        const buttons = document.querySelectorAll('.answer-btn');
+        buttons.forEach(button => {
+            button.classList.remove('clicked');
+            button.classList.remove('disabled');
+            button.style.backgroundColor = ''; // Restableix el color del fons
+            button.style.color = ''; // Restableix el color del text
+            button.style.cursor = ''; // Restableix el cursor
+        });
+    }
+</script>
+</body>
+</html>
